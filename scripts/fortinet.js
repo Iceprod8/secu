@@ -18,10 +18,6 @@ function attendre(min, max) {
         concurrency: Cluster.CONCURRENCY_CONTEXT,
         maxConcurrency: 1,
         timeout: 1000000000,
-        puppeteerOptions: {
-            headless: false,
-            executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-        },
     });
     await cluster.task(async ({ page, data: url }) => {
         await page.goto(url);

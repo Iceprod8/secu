@@ -13,10 +13,7 @@ function attendre(min, max) {
     const cluster = await Cluster.launch({
         concurrency: Cluster.CONCURRENCY_CONTEXT,
         maxConcurrency: 1,
-        puppeteerOptions: {
-            headless: false,
-            executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-        },
+        timeout: 1000000000,
     });
     await cluster.task(async ({ page, data: url }) => {
         await page.goto(url);
@@ -57,7 +54,7 @@ function attendre(min, max) {
                 csvData.push(tab)
             }
             j= j+1
-            const suivant = await page.$('#page') 
+            const suivant = await page.$('#page')
             const long = await suivant.select(`${j}`)
             if(long.length !== 0){
                 await suivant.select(`${j}`)
