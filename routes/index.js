@@ -2,16 +2,21 @@ var express = require('express');
 var router = express.Router();
 const json2csv = require('json2csv').parse;
 const fs = require('fs');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://CyberSite:EEpwNzf1LM6R95S0@cluster0.c6zinmu.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+
 /* GET home page. */
 router.get('/', (req, res) => {
-  const MongoClient = require('mongodb').MongoClient;
-  const url = 'mongodb+srv://CyberSite:EEpwNzf1LM6R95S0@cluster0.c6zinmu.mongodb.net/';
-  MongoClient.connect(url, async function (err, client) {
-    db = client.db('Info');
-    collection = db.collection('classement');
+  client.connect(async err => {
+    collection = client.db('Info').collection('classement');
     async function compte(nomEntreprise) {
       const total = collection.find({
-        "Entreprise": nomEntreprise
+        "Entreprise": nomEntreprise,
+        $and: [
+          { "Actif": true },
+        ]
       })
       const perd = await collection.find({
         $and: [
@@ -47,7 +52,8 @@ router.get('/', (req, res) => {
     const sophos = await compte("Sophos")
     const kapersky = await compte("Kapersky")
     const checkpoint = await compte("CheckPoint")
-    await limitCsv("Cisco"), await limitCsv("Trellix"), await limitCsv("TrendMicro"), await limitCsv("Watch Guard"), await limitCsv("WithSecure"), await limitCsv('BitDefender'), await limitCsv('Sophos'), await limitCsv("Kapersky"), await limitCsv("CheckPoint")
+    const fortinet = await compte("Fortinet")
+    await limitCsv("Cisco"), await limitCsv("Trellix"), await limitCsv("TrendMicro"), await limitCsv("Watch Guard"), await limitCsv("WithSecure"), await limitCsv('BitDefender'), await limitCsv('Sophos'), await limitCsv("Kapersky"), await limitCsv("CheckPoint"), await limitCsv("Fortinet")
     const csvData = fs.readFileSync('./public/javascripts/data.csv', 'utf-8');
     const rows = csvData.split('\n');
     const uniqueRows = new Set();
@@ -56,7 +62,7 @@ router.get('/', (req, res) => {
     });
     fs.writeFileSync('./public/javascripts/data.csv', [...uniqueRows].join('\n'));
 
-    res.render('index', { cisco, trellix, trendmicro, watchguard, withsecure, bitdefender, sophos, kapersky, checkpoint });
+    res.render('index', { cisco, trellix, trendmicro, watchguard, withsecure, bitdefender, sophos, kapersky, checkpoint, fortinet });
   })
 })
 

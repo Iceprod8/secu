@@ -20,7 +20,7 @@ h1 {
 
 .container {
   display: flex;
-  max-height: 500px;
+  max-height: 550px;
   overflow-y: scroll;
   flex-direction: column;
   margin-left: auto;

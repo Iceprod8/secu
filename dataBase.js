@@ -1,5 +1,5 @@
 const fs = require('fs');
-const MongoClient = require('mongodb').MongoClient
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const { execFile } = require('child_process');
 const util = require('util');
 const exec = util.promisify(execFile);
@@ -61,6 +61,12 @@ const exec = util.promisify(execFile);
             csvAll.push(element)
         });
         console.log('9')
+        const { stdout: stdoutFort } = await exec('node', ['./scripts/fortinet.js']);
+        const resultFort = JSON.parse(stdoutFort);
+        resultFort.forEach(element => {
+            csvAll.push(element)
+        });
+        console.log('10')
         fs.writeFile('scrapAll.csv', csvAll.join('\n'), 'utf8', function (err) {
             if (err) {
                 console.error(err);
@@ -69,10 +75,10 @@ const exec = util.promisify(execFile);
             }
         });
 
-        const url = 'mongodb+srv://CyberSite:EEpwNzf1LM6R95S0@cluster0.c6zinmu.mongodb.net/'
-        MongoClient.connect(url, function (err, client) {
-            const db = client.db('Info');
-            const collection = db.collection('classement');
+        const uri = "mongodb+srv://CyberSite:EEpwNzf1LM6R95S0@cluster0.c6zinmu.mongodb.net/?retryWrites=true&w=majority";
+        const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+        client.connect(err => {
+            const collection = client.db('Info').collection('classement');
             var today = new Date();
             for (i = 0; i < csvAll.length; i++) {
                 collection.findOneAndUpdate(
@@ -111,5 +117,5 @@ const exec = util.promisify(execFile);
     } catch (error) {
         console.error(`Error: ${error}`);
     }
+    client.close()
 })();
-
