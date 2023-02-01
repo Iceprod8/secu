@@ -12,6 +12,8 @@ thx.forEach(th => th.addEventListener('click', () => {
   classe.forEach(tr => tbody.appendChild(tr));
 }));
 
+const button = document.getElementById('download-button');
+
 button.addEventListener('click', (e) => {
   e.preventDefault();
   const link = document.createElement('a');
