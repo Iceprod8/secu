@@ -5,6 +5,25 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const { spawn } = require('child_process');
 
+
+
+function spawnDatabaseScript() {
+  const script = spawn('node', ['dataBase.js']);
+  script.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+  });
+  script.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+  });
+  script.on('close', (code) => {
+      console.log(`child process closed with code ${code}`);
+  });
+}
+
+spawnDatabaseScript();
+
+setInterval(spawnDatabaseScript, 604800000);
+
 var indexRouter = require('./routes/index');
 
 var app = express();
@@ -31,12 +50,7 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  setInterval(() => {
-    const script = spawn('node', ['database.js']);
-    script.stdout.on('data');
-    script.stderr.on('data');
-    script.on('close');
-  }, 604800000);
+
   // render the error page
   res.status(err.status || 500);
   res.render('error');
