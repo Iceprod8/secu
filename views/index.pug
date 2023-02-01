@@ -261,3 +261,12 @@ block content
         p
         a#download-button(href='#')
             i.fa.fa-download(aria-hidden='true')  T&eacute;l&eacute;charger un &eacute;chantillon
+        - let d = 100, o = -.5*d;
+        - let sw = .1*d, r = .5*(d - sw);
+        - let len = 2*Math.PI*r;
+        .coul
+          p mise a jour des donnés dans
+          .countdown
+              svg(viewBox=[o, o, d, d].join(' ') stroke-width=sw)
+                  circle(r=r)
+                  circle(r=r stroke-dasharray=len stroke-dashoffset=`${len}px`)

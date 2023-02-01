@@ -71,3 +71,163 @@ div > a{
   justify-content: center;
   color: #fff;
 }
+.coul{
+  display: block ruby;
+}
+
+p{
+  justify-content: center;
+  color: #fff;
+}
+
+.countdown {
+  display: grid;
+  margin: 1em auto;
+  width: 80px;
+  height: 80px;
+}
+.countdown::after {
+  grid-column: 1;
+  grid-row: 1;
+  place-self: center;
+  font: 30px/2 ubuntu mono, consolas, monaco, monospace;
+  animation: num 2592000s steps(1) infinite;
+  animation-delay: var();
+  content: counter(s, decimal-leading-zero);
+}
+
+@keyframes num {
+  0% {
+    counter-reset: s 30;
+  }
+  3.3% {
+    counter-reset: s 29;
+  }
+  6.6% {
+    counter-reset: s 28;
+  }
+  9.9% {
+    counter-reset: s 27;
+  }
+  13.2% {
+    counter-reset: s 26;
+  }
+  16.5% {
+    counter-reset: s 25;
+  }
+  19.8% {
+    counter-reset: s 24;
+  }
+  23.1% {
+    counter-reset: s 23;
+  }
+  26.4% {
+    counter-reset: s 22;
+  }
+  29.7% {
+    counter-reset: s 21;
+  }
+  33% {
+    counter-reset: s 20;
+  }
+  36.3% {
+    counter-reset: s 19;
+  }
+  39.6% {
+    counter-reset: s 18;
+  }
+  42.9% {
+    counter-reset: s 17;
+  }
+  46.2% {
+    counter-reset: s 16;
+  }
+  49.5% {
+    counter-reset: s 15;
+  }
+  52.8% {
+    counter-reset: s 14;
+  }
+  56.1% {
+    counter-reset: s 13;
+  }
+  59.4% {
+    counter-reset: s 12;
+  }
+  62.7% {
+    counter-reset: s 11;
+  }
+  66% {
+    counter-reset: s 10;
+  }
+  69.3% {
+    counter-reset: s 9;
+  }
+  72.6% {
+    counter-reset: s 8;
+  }
+  75.9% {
+    counter-reset: s 7;
+  }
+  79.2% {
+    counter-reset: s 6;
+  }
+  82.5% {
+    counter-reset: s 5;
+  }
+  85.8% {
+    counter-reset: s 4;
+  }
+  89.1% {
+    counter-reset: s 3;
+  }
+  92.4% {
+    counter-reset: s 2;
+  }
+  95.7% {
+    counter-reset: s 1;
+  }
+  99% {
+    counter-reset: s 0;
+  }
+
+}
+svg {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+[r] {
+  fill: none;
+  stroke: silver;
+}
+[r] + [r] {
+  transform: rotate(-90deg);
+  stroke-linecap: round;
+  stroke: #8a9b0f;
+  animation: arc 2592000s linear infinite;
+  animation-name: arc, col;
+}
+
+@keyframes arc {
+  0% {
+    stroke-dashoffset: 0px;
+  }
+}
+@keyframes col {
+  0% {
+    stroke: #8a9b0f;
+  }
+  25% {
+    stroke: #f8ca00;
+  }
+  50% {
+    stroke: #e97f02;
+  }
+  75% {
+    stroke: #bd1550;
+  }
+  100% {
+    stroke: #490a3d;
+  }
+}

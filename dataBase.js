@@ -111,10 +111,10 @@ const exec = util.promisify(execFile);
                 { "Dernier": { $ne: today } },
                 { $set: { "Actif": false } }
             );
-            client.close()
         })
 
-    } catch (error) {
-        console.error(`Error: ${error}`);
+    } catch (err) {
+        console.error(`Error: ${err}`);
     }
+    console.log("base mise a jour")
 })();
