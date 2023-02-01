@@ -12,12 +12,6 @@ thx.forEach(th => th.addEventListener('click', () => {
   classe.forEach(tr => tbody.appendChild(tr));
 }));
 
-const element = document.querySelector('.countdown::after');
-const value = 40000;
-element.style.setProperty('--my-custom-property', value + 's');
-
-const button = document.getElementById('download-button');
-
 button.addEventListener('click', (e) => {
   e.preventDefault();
   const link = document.createElement('a');
