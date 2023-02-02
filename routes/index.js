@@ -13,19 +13,19 @@ router.get('/', (req, res) => {
     collection = client.db('Info').collection('classement');
     async function compte(nomEntreprise) {
       const total = collection.find({
-        "Entreprise": nomEntreprise,
+        "Marque": nomEntreprise,
         $and: [
           { "Actif": true },
         ]
       })
       const perd = await collection.find({
+        "Marque": nomEntreprise,
         $and: [
           { "Actif": { $ne: true } },
-          { "Entreprise": nomEntreprise }
         ]
       });
       const gain = await collection.find({
-        "Entreprise": nomEntreprise,
+        "Marque": nomEntreprise,
         $expr: {
           $eq: ["$Premier", "$Dernier"]
         }

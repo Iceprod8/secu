@@ -86,7 +86,7 @@ const exec = util.promisify(execFile);
                         "Adresse": `${csvAll[i][1]}`,
                         "Telephone": `${csvAll[i][2]}`,
                         "Lien": `${csvAll[i][3]}`,
-                        "Entreprise": `${csvAll[i][4]}`,
+                        "Marque": `${csvAll[i][4]}`,
                         "Actif": true
                     },
                     {
