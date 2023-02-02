@@ -17,6 +17,13 @@ function attendre(min, max) {
         concurrency: Cluster.CONCURRENCY_CONTEXT,
         maxConcurrency: 10,
         timeout: 1000000000,
+        puppeteerOptions: {
+          headless: true,
+          args: [
+              '--no-sandbox',
+              '--disable-setuid-sandbox',
+          ]
+      },
     });
     await cluster.task(async ({ page, data: url }) => {
         await page.goto(url);
