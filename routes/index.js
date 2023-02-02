@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
       const limit25 = collection.find({
         "Entreprise": nomEntreprise
       }).limit(25).toArray()
-      const fields = ['Nom', 'Adresse', 'Telephone', 'Lien', "Entreprise"];
+      const fields = ['Nom', 'Adresse', 'Telephone', 'Lien', "Marque"];
       const csv = json2csv(await limit25, { fields });
       fs.appendFileSync('./public/javascripts/data.csv', csv + "\n");
       return csv

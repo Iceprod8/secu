@@ -2,9 +2,49 @@ extends layout
 
 
 block content
-    div
-        h1 Le classement des revendeurs de solutions de s&eacute;curit&eacute; en France par marques
-        .container
+
+  .bg-white.min-h-screen.w-full.justify-center.flex.flex-row.items-center(class='dark:bg-gray-900')
+    .flex.flex-row.justify-between.toggle
+      .darkmode
+        label.flex.items-center.cursor-pointer(for='dark-toggle')
+                .relative
+                  input#dark-toggle.checkbox.hidden(type='checkbox' name='dark-mode')
+                  .block.border-gray-900.w-14.h-8.rounded-full(class='border-[1px] dark:border-white')
+                  .dot.absolute.left-1.top-1.bg-gray-800.w-6.h-6.rounded-full.transition(class='dark:bg-white')
+    .all
+        .titre(class='dark:text-white')
+          h1 Le classement des revendeurs de solutions de s&eacute;curit&eacute; en France par marques
+          h3 Retrouvez chaque mois l'&eacute;tat des lieux du march&eacute; de la distribution de la s&eacute;curit&eacute;
+        .boutonCR
+          a.btn(href='mailto:contact@datawolf.fr') Nous contacter
+          a.btn(href='http://secubase.fr/') Acceuil
+        .carrousel(class='dark:text-white')
+            ul#c
+                li
+                  img(src="/images/avg.png" style="display: inline;")
+                li
+                  img(src="/images/bitdefender.png" style="display: inline;")
+                li
+                  img(src="/images/cloud.png" style="display: inline;")
+                li
+                  img(src="/images/eset.png" style="display: inline;")
+                li
+                  img(src="/images/fortinet.png" style="display: inline;")
+                li
+                  img(src="/images/fsecure.png" style="display: inline;")
+                li
+                  img(src="/images/kaspersky.png" style="display: inline;")
+                li
+                  img(src="/images/mcafee.png" style="display: inline;")
+                li
+                  img(src="/images/sonicwall.png" style="display: inline;")
+                li
+                  img(src="/images/sophos.png" style="display: inline;")
+                li
+                  img(src="/images/symantec.png" style="display: inline;")
+                li
+                  img(src="/images/trend.png" style="display: inline;")
+        .container(class='dark:text-white')
             table
                 thead
                     tr
@@ -258,6 +298,14 @@ block content
                         td Premium
                         td Premium
                         td Premium
-        p
-        a#download-button(href='#')
-            i.fa.fa-download(aria-hidden='true')  T&eacute;l&eacute;charger un &eacute;chantillon
+        .boutonD
+          a#download-button.btn.outlined(href='#')(class='dark:text-white')
+              i.fa.fa-download(aria-hidden='true')  T&eacute;l&eacute;charger un &eacute;chantillon
+  footer.footer-distributed
+    .footer-right
+      a(href='https://www.youtube.com/@rocketlead4717')
+        i.fa.fa-youtube-play
+      a(href='https://www.linkedin.com/company/datawolf-sas/')
+        i.fa.fa-linkedin
+    .footer-left
+      p datawolf &copy; 2015

@@ -1,9 +1,16 @@
 doctype html
 head
   title siteCyber
-  link(rel='stylesheet', href='/stylesheets/style.css')
+  script(src='/javascripts/tailwindcss.js')
+  script.
+    tailwind.config = {
+    darkMode: 'class',
+    }
   link(rel='stylesheet', href='/stylesheets/font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.css')
-
+  link(rel='stylesheet' href='/stylesheets/reset.min.css')
+  link(rel='stylesheet', href='/stylesheets/style.css')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js')
 body
-  block content 
-script(src="/javascripts/script.js") 
+  block content
+script(src="https://code.jquery.com/jquery-3.6.3.min.js")
+script(src="/javascripts/script.js")
