@@ -17,7 +17,7 @@ function attendre(min, max) {
 (async () => {
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
-    maxConcurrency: 1,
+    maxConcurrency: 10,
     timeout: 1000000000,
     puppeteerOptions: {
       headless: true,
@@ -56,6 +56,8 @@ function attendre(min, max) {
         }
       }
     } else {
+      await page.goto(lien)
+      await attendre(10000,10000)
         taille = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/h3');
         if (await taille.length > 0) {
           nom = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/h3').then(element => element[0].evaluate(node => node.textContent));
