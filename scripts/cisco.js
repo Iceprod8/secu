@@ -6,6 +6,7 @@ let csvData = [];
 let next = true
 let first = true
 let lienPartner = []
+let error = []
 // fonction pour faire un temps d'attente
 function attendre(min, max) {
   const temps = Math.random() * (max - min) + min;
@@ -19,6 +20,13 @@ function attendre(min, max) {
     concurrency: Cluster.CONCURRENCY_CONTEXT,
     maxConcurrency: 10,
     timeout: 100000000,
+    puppeteerOptions: {
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ]
+    },
   });
   await cluster.task(async ({ page, data: lien }) => {
     if (first) {
@@ -31,7 +39,11 @@ function attendre(min, max) {
         if (response.url().includes('getPfPartners')) {
           await response.json().then(data => {
             for (let i = 0; i < 12; i++) {
+              try {
                 lienPartner.push(data.data[i].site_id)
+              } catch (err) {
+                error.push(err)
+              }
             }
           })
         }
