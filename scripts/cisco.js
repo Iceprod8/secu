@@ -87,7 +87,6 @@ function attendre(min, max) {
       }
       tab = [nom, adresse, tel, site, 'Cisco'];
       tab1 = tab.map(val => val.replace(/,/g, " ").replace('FRANCE', ' '));
-      console.log(tab1)
       csvData.push(tab1);
     }
   });
