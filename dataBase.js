@@ -12,7 +12,7 @@ const exec = util.promisify(execFile);
     resultTrellix.forEach(element => {
       csvAll.push(element)
     });
-    console.log('1er effectuer')
+    console.log('1er site effectuer')
     const { stdout: stdoutWatch } = await exec('node', ['./scripts/watchguard.js']);
     const resultWatch = JSON.parse(stdoutWatch);
     resultWatch.forEach(element => {

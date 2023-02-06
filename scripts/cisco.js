@@ -31,7 +31,7 @@ function attendre(min, max) {
   await cluster.task(async ({ page, data: lien }) => {
     if (first) {
       await page.goto(lien);
-      await attendre(5000, 5000);
+      await attendre(15000, 15000);
       const button = await page.$('#scrollableArea > div:nth-child(2) > div > main > div > header > div > div.mb-5 > div > div > button');
       await button.click();
       const select = await page.$('#scrollableArea > div:nth-child(2) > div > main > div > header > div > div.mb-5 > div > div > ul > li:nth-child(77) > span');
