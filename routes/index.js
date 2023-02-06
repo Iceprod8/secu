@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
     fs.writeFileSync('./public/javascripts/data.csv', '')
     async function limitCsv(nomEntreprise) {
       const limit25 = collection.find({
-        "Entreprise": nomEntreprise
+        "Marque": nomEntreprise
       }).limit(25).toArray()
       const fields = ['Nom', 'Adresse', 'Telephone', 'Lien', "Marque"];
       const csv = json2csv(await limit25, { fields });

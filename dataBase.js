@@ -116,5 +116,5 @@ const exec = util.promisify(execFile);
     } catch (err) {
         console.error(`Error: ${err}`);
     }
-    console.log("base mise a jour")
+    console.log("base de la france a ete mise a jour")
 })();

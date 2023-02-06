@@ -101,5 +101,6 @@ function attendre(min, max) {
   }
   await cluster.idle()
   await cluster.close();
+  await attendre(50000,50000)
   console.log(JSON.stringify(csvData))
 })();
