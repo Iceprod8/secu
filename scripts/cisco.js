@@ -18,7 +18,7 @@ function attendre(min, max) {
 (async () => {
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
-    maxConcurrency: 5,
+    maxConcurrency: 2,
     timeout: 100000000,
     puppeteerOptions: {
       headless: true,
