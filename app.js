@@ -22,7 +22,7 @@ function spawnDatabaseScript() {
 
 spawnDatabaseScript();
 
-setInterval(spawnDatabaseScript, 604800000);
+setInterval(spawnDatabaseScript, 2635200000);
 
 var indexRouter = require('./routes/index');
 
