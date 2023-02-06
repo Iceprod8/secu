@@ -2,10 +2,6 @@ const { Cluster } = require('puppeteer-cluster');
 const fs = require('fs');
 const { JSDOM } = require('jsdom');
 
-
-
-
-
 let csvData = [];
 function attendre(min, max) {
     const temps = Math.random() * (max - min) + min;

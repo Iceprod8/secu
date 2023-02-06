@@ -19,7 +19,7 @@ function attendre(min, max) {
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
     maxConcurrency: 5,
-    timeout: 100000000,
+    timeout: 500000000,
     puppeteerOptions: {
       headless: true,
       args: [
@@ -64,9 +64,16 @@ function attendre(min, max) {
       }
       taille = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/div[1]');
       if (await taille.length > 0) {
-        adresse = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/div[1]').then(element => element[0].evaluate(node => node.textContent));
+        adresse = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/div[1]').then(element => element[0].evaluate(node => node.innerHTML));
+        adresseTab = adresse.split('<p>');
+        adresse = ''
+        for (let k = 0; k < adresseTab.length - 1; k++) {
+          adresse = adresse + adresseTab[k]
+          pays = adresseTab[k + 1]
+        }
       } else {
         adresse = '';
+        pays = '';
       }
       taille = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/div[2]/p[1]/a');
       if (await taille.length > 0) {
@@ -80,19 +87,19 @@ function attendre(min, max) {
       } else {
         tel = '';
       }
-      tab = [nom, adresse, tel, site, 'Cisco'];
-      tab1 = tab.map(val => val.replace(/,/g, " ").replace('FRANCE', ' '));
+      tab = [nom, adresse, pays, tel, site, 'Cisco'];
+      tab1 = tab.map(val => val.replace(/,/g, "").replace(/<\/p>/g, " "));
       csvData.push(tab1);
     }
   });
-await cluster.queue('https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/')
-await cluster.idle();
-first = false
-const lienTotalPartner = Array.from(new Set(lienPartner));
-for (j = 0; j < lienTotalPartner.length; j++) {
-  await cluster.queue(`https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/partner/${lienTotalPartner[j]}`)
-}
-await cluster.idle()
-await cluster.close();
-console.log(JSON.stringify(csvData))
-}) ();
+  await cluster.queue('https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/')
+  await cluster.idle();
+  first = false
+  const lienTotalPartner = Array.from(new Set(lienPartner));
+  for (j = 0; j < lienTotalPartner.length; j++) {
+    await cluster.queue(`https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/partner/${lienTotalPartner[j]}`)
+  }
+  await cluster.idle()
+  await cluster.close();
+  console.log(JSON.stringify(csvData))
+})();
