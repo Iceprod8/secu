@@ -5,21 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const { spawn } = require('child_process');
 
-
-
-function spawnDatabaseScript() {
-  const script = spawn('node', ['dataBase.js']);
-  script.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
-  });
-  script.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
-  });
-  script.on('close', (code) => {
-      console.log(`child process closed with code ${code}`);
-  });
-}
-
 var indexRouter = require('./routes/index');
 
 var app = express();
