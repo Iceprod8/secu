@@ -78,7 +78,14 @@ li > img{
 .active {
   opacity: 1;
 }
+/*
+    Bouton selection France ou Monde
+*/
 
+.replace{
+  display: flex;
+  flex-direction: row-reverse;
+}
 /*
     tableau des donnes
 */
@@ -95,7 +102,6 @@ li > img{
   border-width: 1px;
   box-shadow: 5px 5px rgb(184, 184, 184);
 }
-
 table {
   border-collapse: collapse;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);

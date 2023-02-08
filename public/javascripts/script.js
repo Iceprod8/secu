@@ -14,7 +14,7 @@ setInterval(function () {
   $("#c > li").eq(i + 3).css('transition-delay', '1s');
   if (i < max - 4) {
     i = i + 4;
-  }else {
+  } else {
     i = 0;
   }
   $("#c > li").eq(i).css('left', '0').addClass('active').css('transition-delay', '1.25s');
@@ -53,3 +53,16 @@ function darkModeListener() {
 }
 
 document.querySelector("input[type='checkbox']#dark-toggle").addEventListener("click", darkModeListener);
+let k = 1
+document.getElementById("replaceBtn").addEventListener("click", function () {
+  if (k % 2 == 1) {
+    document.getElementById("table1").style.display = "none";
+    document.getElementById("table2").style.display = "inline-table";
+    document.getElementById("download-button").style.display = "none";
+  } else {
+    document.getElementById("table1").style.display = "inline-table";
+    document.getElementById("table2").style.display = "none";
+    document.getElementById("download-button").style.display = "flex";
+  }
+  k++
+});

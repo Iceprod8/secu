@@ -30,7 +30,10 @@ router.get('/', (req, res) => {
           $eq: ["$Premier", "$Dernier"]
         }
       })
-      const tabPerduGagner = [await total.count(), await perd.count(), await gain.count()];
+      const pays = await collection.find({
+        "Marque": nomEntreprise,
+      })
+      const tabPerduGagner = [await total.count(), await perd.count(), await gain.count(), await pays.count()];
       return tabPerduGagner;
     }
     fs.writeFileSync('./public/javascripts/data.csv', '')
@@ -62,7 +65,7 @@ router.get('/', (req, res) => {
     });
     fs.writeFileSync('./public/javascripts/data.csv', [...uniqueRows].join('\n'));
 
-    res.render('index', { cisco, trellix, trendmicro, watchguard, withsecure, bitdefender, sophos, kapersky, checkpoint, fortinet });
+    res.render('index', { cisco, trellix, trendmicro, watchguard, withsecure, bitdefender, sophos, kapersky, checkpoint, fortinet});
   })
 })
 

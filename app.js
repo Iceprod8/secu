@@ -20,10 +20,6 @@ function spawnDatabaseScript() {
   });
 }
 
-spawnDatabaseScript();
-
-setInterval(spawnDatabaseScript, 2000000000);
-
 var indexRouter = require('./routes/index');
 
 var app = express();

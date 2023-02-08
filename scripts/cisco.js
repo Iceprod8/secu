@@ -3,10 +3,10 @@ const fs = require('fs');
 const { JSDOM } = require('jsdom');
 
 let csvData = [];
-let next = true
-let first = true
 let lienPartner = []
 let error = []
+let lienTotalPartner = []
+let nbPartner = 0
 // fonction pour faire un temps d'attente
 function attendre(min, max) {
   const temps = Math.random() * (max - min) + min;
@@ -18,8 +18,8 @@ function attendre(min, max) {
 (async () => {
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
-    maxConcurrency: 2,
-    timeout: 100000000,
+    maxConcurrency: 10,
+    timeout: 500000000,
     puppeteerOptions: {
       headless: true,
       args: [
@@ -31,7 +31,6 @@ function attendre(min, max) {
   await cluster.task(async ({ page, data: lien }) => {
     if (first) {
       await page.goto(lien);
-      await attendre(15000, 15000);
       const button = await page.$('#scrollableArea > div:nth-child(2) > div > main > div > header > div > div.mb-5 > div > div > button');
       await button.click();
       const select = await page.$('#scrollableArea > div:nth-child(2) > div > main > div > header > div > div.mb-5 > div > div > ul > li:nth-child(77) > span');
@@ -69,7 +68,12 @@ function attendre(min, max) {
       }
       taille = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/div[1]');
       if (await taille.length > 0) {
-        adresse = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/div[1]').then(element => element[0].evaluate(node => node.textContent));
+        adresse = await page.$x('//*[@id="scrollableArea"]/div[1]/div[1]/div[1]/section/div[1]').then(element => element[0].evaluate(node => node.innerHTML));
+        adresseTab = adresse.split('<p>');
+        adresse = ''
+        for (let k = 0; k < adresseTab.length - 1; k++) {
+          adresse = adresse + adresseTab[k]
+        }
       } else {
         adresse = '';
       }
@@ -86,18 +90,20 @@ function attendre(min, max) {
         tel = '';
       }
       tab = [nom, adresse, tel, site, 'Cisco'];
-      tab1 = tab.map(val => val.replace(/,/g, " ").replace('FRANCE', ' '));
+      tab1 = tab.map(val => val.replace(/,/g, "").replace(/<\/p>/g, " "));
       csvData.push(tab1);
     }
   });
-await cluster.queue('https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/')
-await cluster.idle();
-first = false
-const lienTotalPartner = Array.from(new Set(lienPartner));
-for (j = 0; j < lienTotalPartner.length; j++) {
-  await cluster.queue(`https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/partner/${lienTotalPartner[j]}`)
-}
-await cluster.idle()
-await cluster.close();
-console.log(JSON.stringify(csvData))
-}) ();
+  next = true
+  first = true
+  await cluster.queue('https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/')
+  await cluster.idle();
+  first = false
+  const lienTotalPartner = Array.from(new Set(lienPartner));
+  for (j = 0; j < lienTotalPartner.length; j++) {
+    await cluster.queue(`https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/partner/${lienTotalPartner[j]}`)
+  }
+  await cluster.idle()
+  await cluster.close();
+  console.log(JSON.stringify(csvData))
+})();

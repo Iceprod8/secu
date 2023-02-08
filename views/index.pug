@@ -1,3 +1,4 @@
+
 extends layout
 
 
@@ -7,10 +8,10 @@ block content
     .flex.flex-row.justify-between.toggle
       .darkmode
         label.flex.items-center.cursor-pointer(for='dark-toggle')
-                .relative
-                  input#dark-toggle.checkbox.hidden(type='checkbox' name='dark-mode')
-                  .block.border-gray-900.w-14.h-8.rounded-full(class='border-[1px] dark:border-white')
-                  .dot.absolute.left-1.top-1.bg-gray-800.w-6.h-6.rounded-full.transition(class='dark:bg-white')
+          .relative
+            input#dark-toggle.checkbox.hidden(type='checkbox' name='dark-mode')
+            .block.border-gray-900.w-14.h-8.rounded-full(class='border-[1px] dark:border-white')
+            .dot.absolute.left-1.top-1.bg-gray-800.w-6.h-6.rounded-full.transition(class='dark:bg-white')
     .all
         .titre(class='dark:text-white')
           h1 Le classement des revendeurs de solutions de s&eacute;curit&eacute; en France par marques
@@ -44,260 +45,532 @@ block content
                   img(src="/images/symantec.png" style="display: inline;")
                 li
                   img(src="/images/trend.png" style="display: inline;")
+        .replace
+          .flex.flex-row.justify-between.toggle(class='dark:text-white' style='padding: 10px; display: flex;') France
+            label.flex.items-center.cursor-pointer(for='replaceBtn')
+              .relative
+                input#replaceBtn.checkbox.hidden(type='checkbox' name='dark-mode')
+                .block.border-gray-900.w-14.h-8.rounded-full(class='border-[1px] dark:border-white')
+                .dot.absolute.left-1.top-1.bg-gray-800.w-6.h-6.rounded-full.transition(class='dark:bg-white')
+            p(class='dark:text-white') Monde
         .container(class='dark:text-white')
-            table
-                thead
-                    tr
-                        th Marque
-                        th Nombre de Partenaires
-                        th Perdu
-                        th Gagné
-                tbody
-                    tr
-                        td Cisco
-                        td=cisco[0]
-                        td=cisco[1]
-                        td=cisco[2]
-                    tr
-                        td TrendMicro
-                        td=trendmicro[0]
-                        td=trendmicro[1]
-                        td=trendmicro[2]
-                    tr
-                        td Trellix
-                        td=trellix[0]
-                        td=trellix[1]
-                        td=trellix[2]
-                    tr
-                        td WithSecure
-                        td=withsecure[0]
-                        td=withsecure[1]
-                        td=withsecure[2]
-                    tr
-                        td Watchguard
-                        td=watchguard[0]
-                        td=watchguard[1]
-                        td=watchguard[2]
-                    tr
-                        td Bit Defender
-                        td=bitdefender[0]
-                        td=bitdefender[1]
-                        td=bitdefender[2]
-                    tr
-                        td Sophos
-                        td=sophos[0]
-                        td=sophos[1]
-                        td=sophos[2]
-                    tr
-                        td Kapersky
-                        td=kapersky[0]
-                        td=kapersky[1]
-                        td=kapersky[2]
-                    tr
-                        td CheckPoint
-                        td=checkpoint[0]
-                        td=checkpoint[1]
-                        td=checkpoint[2]
-                    tr
-                        td Fortinet
-                        td=fortinet[0]
-                        td=fortinet[1]
-                        td=fortinet[2]
-                    tr
-                        td Norton
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Avast
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td AVG
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td ESET
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Avira
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td F-Secure
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Malwarebytes
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Quick Heal
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Webroot
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Comodo
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td G Data
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td BullGuard
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td PC Matic
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td TotalAV
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Vipre
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td NortonLifeLock
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Adaware
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Microsoft Defender
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Emsisoft
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td K7 Computing
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Cylance
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Carbon Black
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Acronis
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td ZoneAlarm
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Symantec
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Panda Security
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Dr.Web
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td TrustPort
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td AVG Internet Security
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Trustwave
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td AVG AntiVirus FREE
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Norton AntiVirus
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td AVG Internet Security Business Edition
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td McAfee AntiVirus Plus
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Norton Security
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Norton Security Deluxe
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Norton Security Premium
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Avast Internet Security
-                        td Premium
-                        td Premium
-                        td Premium
-                    tr
-                        td Avast Premier
-                        td Premium
-                        td Premium
-                        td Premium
+          table#table1(style="display: inline-table;")
+            thead
+              tr
+                  th Marque
+                  th Nombre de Partenaires
+                  th Perdu
+                  th Gagné
+            tbody
+              tr
+                  td Cisco
+                  td=cisco[0]
+                  td=cisco[1]
+                  td=cisco[2]
+              tr
+                  td TrendMicro
+                  td=trendmicro[0]
+                  td=trendmicro[1]
+                  td=trendmicro[2]
+              tr
+                  td Trellix
+                  td=trellix[0]
+                  td=trellix[1]
+                  td=trellix[2]
+              tr
+                  td WithSecure
+                  td=withsecure[0]
+                  td=withsecure[1]
+                  td=withsecure[2]
+              tr
+                  td Watchguard
+                  td=watchguard[0]
+                  td=watchguard[1]
+                  td=watchguard[2]
+              tr
+                  td Bit Defender
+                  td=bitdefender[0]
+                  td=bitdefender[1]
+                  td=bitdefender[2]
+              tr
+                  td Sophos
+                  td=sophos[0]
+                  td=sophos[1]
+                  td=sophos[2]
+              tr
+                  td Kapersky
+                  td=kapersky[0]
+                  td=kapersky[1]
+                  td=kapersky[2]
+              tr
+                  td CheckPoint
+                  td=checkpoint[0]
+                  td=checkpoint[1]
+                  td=checkpoint[2]
+              tr
+                  td Fortinet
+                  td=fortinet[0]
+                  td=fortinet[1]
+                  td=fortinet[2]
+              tr
+                  td Norton
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Avast
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td AVG
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td ESET
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Avira
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td F-Secure
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Malwarebytes
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Quick Heal
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Webroot
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Comodo
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td G Data
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td BullGuard
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td PC Matic
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td TotalAV
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Vipre
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td NortonLifeLock
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Adaware
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Microsoft Defender
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Emsisoft
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td K7 Computing
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Cylance
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Carbon Black
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Acronis
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td ZoneAlarm
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Symantec
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Panda Security
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Dr.Web
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td TrustPort
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td AVG Internet Security
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Trustwave
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td AVG AntiVirus FREE
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Norton AntiVirus
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td AVG Internet Security Business Edition
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td McAfee AntiVirus Plus
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Norton Security
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Norton Security Deluxe
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Norton Security Premium
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Avast Internet Security
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Avast Premier
+                  td Premium
+                  td Premium
+                  td Premium
+          table#table2(style="display: none;")
+            thead
+              tr
+                  th Marque
+                  th Nombre de Partenaires
+                  th Perdu
+                  th Gagné
+                  th Nombre de Pays
+            tbody
+              tr
+                  td Cisco
+                  td=cisco[0]
+                  td=cisco[1]
+                  td=cisco[2]
+                  td=cisco[3]
+              tr
+                  td TrendMicro
+                  td=trendmicro[0]
+                  td=trendmicro[1]
+                  td=trendmicro[2]
+                  td=trendmicro[3]
+              tr
+                  td Trellix
+                  td=trellix[0]
+                  td=trellix[1]
+                  td=trellix[2]
+                  td=trellix[3]
+              tr
+                  td WithSecure
+                  td=withsecure[0]
+                  td=withsecure[1]
+                  td=withsecure[2]
+                  td=withsecure[3]
+              tr
+                  td Watchguard
+                  td=watchguard[0]
+                  td=watchguard[1]
+                  td=watchguard[2]
+                  td=watchguard[3]
+              tr
+                  td Bit Defender
+                  td=bitdefender[0]
+                  td=bitdefender[1]
+                  td=bitdefender[2]
+                  td=bitdefender[3]
+              tr
+                  td Sophos
+                  td=sophos[0]
+                  td=sophos[1]
+                  td=sophos[2]
+                  td=sophos[3]
+              tr
+                  td Kapersky
+                  td=kapersky[0]
+                  td=kapersky[1]
+                  td=kapersky[2]
+                  td=kapersky[3]
+              tr
+                  td CheckPoint
+                  td=checkpoint[0]
+                  td=checkpoint[1]
+                  td=checkpoint[2]
+                  td=checkpoint[3]
+              tr
+                  td Fortinet
+                  td=fortinet[0]
+                  td=fortinet[1]
+                  td=fortinet[2]
+                  td=fortinet[3]
+              tr
+                  td Norton
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Avast
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td AVG
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td ESET
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Avira
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td F-Secure
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Malwarebytes
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Quick Heal
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Webroot
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Comodo
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td G Data
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td BullGuard
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td PC Matic
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td TotalAV
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Vipre
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td NortonLifeLock
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Adaware
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Microsoft Defender
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Emsisoft
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td K7 Computing
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Cylance
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Carbon Black
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Acronis
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td ZoneAlarm
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Symantec
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Panda Security
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Dr.Web
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td TrustPort
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td AVG Internet Security
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Trustwave
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td AVG AntiVirus FREE
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Norton AntiVirus
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td AVG Internet Security Business Edition
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td McAfee AntiVirus Plus
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Norton Security
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Norton Security Deluxe
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Norton Security Premium
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Avast Internet Security
+                  td Premium
+                  td Premium
+                  td Premium
+              tr
+                  td Avast Premier
+                  td Premium
+                  td Premium
+                  td Premium
         .boutonD
           a#download-button.btn.outlined(href='#')(class='dark:text-white')
               i.fa.fa-download(aria-hidden='true')  T&eacute;l&eacute;charger un &eacute;chantillon
