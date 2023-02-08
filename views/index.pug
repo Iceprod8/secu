@@ -46,13 +46,14 @@ block content
                 li
                   img(src="/images/trend.png" style="display: inline;")
         .replace
-          .flex.flex-row.justify-between.toggle(class='dark:text-white' style='padding: 10px; display: flex;') France
+          .flex.flex-row.justify-between.toggle(class='dark:text-white' style='padding: 10px; display: flex;')
+            p#typeDeSelection(class='dark:text-white') France
             label.flex.items-center.cursor-pointer(for='replaceBtn')
               .relative
                 input#replaceBtn.checkbox.hidden(type='checkbox' name='dark-mode')
                 .block.border-gray-900.w-14.h-8.rounded-full(class='border-[1px] dark:border-white')
                 .dot.absolute.left-1.top-1.bg-gray-800.w-6.h-6.rounded-full.transition(class='dark:bg-white')
-            p(class='dark:text-white') Monde
+            p#typeDeSelection(class='dark:text-white') Monde
         .container(class='dark:text-white')
           table#table1(style="display: inline-table;")
             thead
@@ -314,68 +315,57 @@ block content
                   th Nombre de Partenaires
                   th Perdu
                   th Gagné
-                  th Nombre de Pays
             tbody
               tr
                   td Cisco
-                  td=cisco[0]
-                  td=cisco[1]
-                  td=cisco[2]
-                  td=cisco[3]
+                  td=ciscoWorld[0]
+                  td=ciscoWorld[1]
+                  td=ciscoWorld[2]
               tr
                   td TrendMicro
-                  td=trendmicro[0]
-                  td=trendmicro[1]
-                  td=trendmicro[2]
-                  td=trendmicro[3]
+                  td=trendmicroWorld[0]
+                  td=trendmicroWorld[1]
+                  td=trendmicroWorld[2]
               tr
                   td Trellix
-                  td=trellix[0]
-                  td=trellix[1]
-                  td=trellix[2]
-                  td=trellix[3]
+                  td=trellixWorld[0]
+                  td=trellixWorld[1]
+                  td=trellixWorld[2]
               tr
                   td WithSecure
-                  td=withsecure[0]
-                  td=withsecure[1]
-                  td=withsecure[2]
-                  td=withsecure[3]
+                  td=withsecureWorld[0]
+                  td=withsecureWorld[1]
+                  td=withsecureWorld[2]
               tr
                   td Watchguard
-                  td=watchguard[0]
-                  td=watchguard[1]
-                  td=watchguard[2]
-                  td=watchguard[3]
+                  td=watchguardWorld[0]
+                  td=watchguardWorld[1]
+                  td=watchguardWorld[2]
               tr
                   td Bit Defender
-                  td=bitdefender[0]
-                  td=bitdefender[1]
-                  td=bitdefender[2]
-                  td=bitdefender[3]
+                  td=bitdefenderWorld[0]
+                  td=bitdefenderWorld[1]
+                  td=bitdefenderWorld[2]
               tr
                   td Sophos
-                  td=sophos[0]
-                  td=sophos[1]
-                  td=sophos[2]
-                  td=sophos[3]
+                  td=sophosWorld[0]
+                  td=sophosWorld[1]
+                  td=sophosWorld[2]
               tr
                   td Kapersky
-                  td=kapersky[0]
-                  td=kapersky[1]
-                  td=kapersky[2]
-                  td=kapersky[3]
+                  td=kaperskyWorld[0]
+                  td=kaperskyWorld[1]
+                  td=kaperskyWorld[2]
               tr
                   td CheckPoint
-                  td=checkpoint[0]
-                  td=checkpoint[1]
-                  td=checkpoint[2]
-                  td=checkpoint[3]
+                  td Prenium
+                  td Prenium
+                  td Prenium
               tr
                   td Fortinet
-                  td=fortinet[0]
-                  td=fortinet[1]
-                  td=fortinet[2]
-                  td=fortinet[3]
+                  td Prenium
+                  td Prenium
+                  td Prenium
               tr
                   td Norton
                   td Premium

@@ -86,6 +86,13 @@ li > img{
   display: flex;
   flex-direction: row-reverse;
 }
+
+#typeDeSelection{
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 10px;
+}
 /*
     tableau des donnes
 */

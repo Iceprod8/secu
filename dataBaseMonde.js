@@ -1,6 +1,15 @@
 const { Cluster } = require('puppeteer-cluster');
 const fs = require('fs');
 const { JSDOM } = require('jsdom');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const { execFile } = require('child_process');
+const util = require('util');
+const exec = util.promisify(execFile);
+
+
+const uri = "mongodb+srv://CyberSite:EEpwNzf1LM6R95S0@cluster0.c6zinmu.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+var today = new Date();
 
 let csvData = [];
 let paysMonde = ['Afghanistan', 'Albania', 'Antarctica', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Azerbaijan', 'Argentina', 'Australia', 'Austria', 'Bahamas', 'Bahrain', 'Bangladesh', 'Armenia', 'Barbados', 'Belgium', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Bouvet Island', 'Brazil', 'Belize', 'British Indian Ocean Territory', 'Solomon Islands', 'British Virgin Islands', 'Brunei Darussalam', 'Bulgaria', 'Myanmar', 'Burundi', 'Belarus', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands', 'Central African', 'Sri Lanka', 'Chad', 'Chile', 'China', 'Taiwan', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Mayotte', 'Republic of the Congo', 'The Democratic Republic Of The Congo', 'Cook Islands', 'Costa Rica', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Benin', 'Denmark', 'Dominica', 'Dominican Republic', 'Ecuador', 'El Salvador', 'Equatorial Guinea', 'Ethiopia', 'Eritrea', 'Estonia', 'Faroe Islands', 'Falkland Islands', 'South Georgia and the South Sandwich Islands', 'Fiji', 'Finland', 'Åland Islands', 'France', 'French Guiana', 'French Polynesia', 'French Southern Territories', 'Djibouti', 'Gabon', 'Georgia', 'Gambia', 'Occupied Palestinian Territory', 'Germany', 'Ghana', 'Gibraltar', 'Kiribati', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guinea', 'Guyana', 'Haiti', 'Heard Island and McDonald Islands', 'Vatican City State', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Islamic Republic of Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', "Côte d'Ivoire", 'Jamaica', 'Japan', 'Kazakhstan', 'Jordan', 'Kenya', "Democratic People's Republic of Korea", 'Republic of Korea', 'Kuwait', 'Kyrgyzstan', "Lao People's Democratic Republic", 'Lebanon', 'Lesotho', 'Latvia', 'Liberia', 'Libyan Arab Jamahiriya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macao', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Martinique', 'Mauritania', 'Mauritius', 'Mexico', 'Monaco', 'Mongolia', 'Republic of Moldova', 'Montserrat', 'Morocco', 'Mozambique', 'Oman', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'Netherlands Antilles', 'Aruba', 'New Caledonia', 'Vanuatu', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Norway', 'Northern Mariana Islands', 'United States Minor Outlying Islands', 'Federated States of Micronesia', 'Marshall Islands', 'Palau', 'Pakistan', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'Guinea-Bissau', 'Timor-Leste', 'Puerto Rico', 'Qatar', 'Réunion', 'Romania', 'Russian Federation', 'Rwanda', 'Saint Helena', 'Saint Kitts and Nevis', 'Anguilla', 'Saint Lucia', 'Saint-Pierre and Miquelon', 'Saint Vincent and the Grenadines', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Vietnam', 'Slovenia', 'Somalia', 'South Africa', 'Zimbabwe', 'Spain', 'Western Sahara', 'Sudan', 'Suriname', 'Svalbard and Jan Mayen', 'Swaziland', 'Sweden', 'Switzerland', 'Syrian Arab Republic', 'Tajikistan', 'Thailand', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'United Arab Emirates', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'The Former Yugoslav Republic of Macedonia', 'Egypt', 'United Kingdom', 'Isle of Man', 'United Republic Of Tanzania', 'United States', 'U.S. Virgin Islands', 'Burkina Faso', 'Uruguay', 'Uzbekistan', 'Venezuela', 'Wallis and Futuna', 'Samoa', 'Yemen', 'Serbia and Montenegro', 'Zambia']
@@ -20,7 +29,7 @@ function attendre(min, max) {
   let csv = []
   let next = true
   let first = true
-  let pageSuivant,taille,nom,adresse,adresseTab,pays,site,tel,tab,tab1,lienTotalPartner
+  let pageSuivant, taille, nom, adresse, adresseTab, pays, site, tel, tab, tab1, lienTotalPartner
   let nbPage = 0
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
@@ -96,9 +105,9 @@ function attendre(min, max) {
         tel = '';
       }
       tab = [nom, adresse, pays, tel, site, 'Cisco'];
-      tab1 = tab.map(val => val.replace(/,/g, ".").replace(/<\/p>/g, " ").replace(/\n/g,''));
+      tab1 = tab.map(val => val.replace(/,/g, ".").replace(/<\/p>/g, " ").replace(/\n/g, ''));
       csv.push(tab1);
-      console.log("Il y'a pour l'instant "+csv.length+" Partenaire Cisco")
+      console.log("Il y'a pour l'instant " + csv.length + " Partenaire Cisco")
     }
   });
   await cluster.queue('https://locatr.cloudapps.cisco.com/WWChannels/LOCATR/pf/index.jsp#/')
@@ -111,7 +120,7 @@ function attendre(min, max) {
   await cluster.idle()
   await cluster.close();
   let csv2 = Array.from(new Set(csv));
-  for(let m =0;m < csv2.length;m++){
+  for (let m = 0; m < csv2.length; m++) {
     csvData.push(csv2[m])
   }
   console.log('Cisco Effectuer')
@@ -122,11 +131,53 @@ function attendre(min, max) {
       console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
     }
   });
+  try {
+    client.connect(err => {
+      const collection = client.db('Info').collection('classementMonde');
+      for (let i = 0; i < csvData.length; i++) {
+        collection.findOneAndUpdate(
+          {
+            "Nom": `${csvData[i][0]}`,
+            "Adresse": `${csvData[i][1]}`,
+            "Pays": `${csvData[i][2]}`,
+            "Telephone": `${csvData[i][3]}`,
+            "Lien": `${csvData[i][4]}`,
+            "Marque": `${csvData[i][5]}`,
+            "Actif": true
+          },
+          {
+            $setOnInsert: { "Premier": today },
+            $set: { "Dernier": today }
+          },
+          {
+            upsert: true,
+            returnOriginal: false
+          },
+          function (err, donne) {
+            if (!err) {
+              if (!donne.lastErrorObject.updatedExisting) {
+                console.log('nouvelle entreprise!')
+              }
+            }
+          }
+        )
+      }
+      // remplacement des documents où dernier est différent de la date d'aujourd'hui
+      collection.updateMany(
+        { "Dernier": { $ne: today } },
+        { $set: { "Actif": false } }
+      );
+    })
+
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  console.log("base du monde a ete mise a jour")
 })();
 
 // withsecure
 (async () => {
-  let html,dom,donne,nom,adresse,adresseTab,pays,tel,lien,tab,tab1
+  let html, dom, donne, nom, adresse, adresseTab, pays, tel, lien, tab, tab1
   let csv = []
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
@@ -174,7 +225,7 @@ function attendre(min, max) {
         lien = ''
       }
       tab = [nom, adresse, pays, tel, lien, 'WithSecure']
-      tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g,''));
+      tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g, ''));
       csv.push(tab1)
     }
   });
@@ -184,7 +235,7 @@ function attendre(min, max) {
   await cluster.idle();
   await cluster.close();
   let csv2 = Array.from(new Set(csv));
-  for(let m =0;m < csv2.length;m++){
+  for (let m = 0; m < csv2.length; m++) {
     csvData.push(csv2[m])
   }
   console.log('Withsecure Effectuer')
@@ -195,11 +246,53 @@ function attendre(min, max) {
       console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
     }
   });
+  try {
+    client.connect(err => {
+      const collection = client.db('Info').collection('classementMonde');
+      for (let i = 0; i < csvData.length; i++) {
+        collection.findOneAndUpdate(
+          {
+            "Nom": `${csvData[i][0]}`,
+            "Adresse": `${csvData[i][1]}`,
+            "Pays": `${csvData[i][2]}`,
+            "Telephone": `${csvData[i][3]}`,
+            "Lien": `${csvData[i][4]}`,
+            "Marque": `${csvData[i][5]}`,
+            "Actif": true
+          },
+          {
+            $setOnInsert: { "Premier": today },
+            $set: { "Dernier": today }
+          },
+          {
+            upsert: true,
+            returnOriginal: false
+          },
+          function (err, donne) {
+            if (!err) {
+              if (!donne.lastErrorObject.updatedExisting) {
+                console.log('nouvelle entreprise!')
+              }
+            }
+          }
+        )
+      }
+      // remplacement des documents où dernier est différent de la date d'aujourd'hui
+      collection.updateMany(
+        { "Dernier": { $ne: today } },
+        { $set: { "Actif": false } }
+      );
+    })
+
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  console.log("base du monde a ete mise a jour")
 })();
 
 // watchguard
 (async () => {
-  let paysRecherche,button,donne,nomE,nom,ad,adresse,adresseTab,tel,lien,tab,tab1
+  let paysRecherche, button, donne, nomE, nom, ad, adresse, adresseTab, tel, lien, tab, tab1
   let csv = []
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
@@ -258,7 +351,7 @@ function attendre(min, max) {
   await cluster.idle();
   await cluster.close();
   let csv2 = Array.from(new Set(csv));
-  for(let m =0;m < csv2.length;m++){
+  for (let m = 0; m < csv2.length; m++) {
     csvData.push(csv2[m])
   }
   console.log('Watchguard Effectuer')
@@ -269,6 +362,48 @@ function attendre(min, max) {
       console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
     }
   });
+  try {
+    client.connect(err => {
+      const collection = client.db('Info').collection('classementMonde');
+      for (let i = 0; i < csvData.length; i++) {
+        collection.findOneAndUpdate(
+          {
+            "Nom": `${csvData[i][0]}`,
+            "Adresse": `${csvData[i][1]}`,
+            "Pays": `${csvData[i][2]}`,
+            "Telephone": `${csvData[i][3]}`,
+            "Lien": `${csvData[i][4]}`,
+            "Marque": `${csvData[i][5]}`,
+            "Actif": true
+          },
+          {
+            $setOnInsert: { "Premier": today },
+            $set: { "Dernier": today }
+          },
+          {
+            upsert: true,
+            returnOriginal: false
+          },
+          function (err, donne) {
+            if (!err) {
+              if (!donne.lastErrorObject.updatedExisting) {
+                console.log('nouvelle entreprise!')
+              }
+            }
+          }
+        )
+      }
+      // remplacement des documents où dernier est différent de la date d'aujourd'hui
+      collection.updateMany(
+        { "Dernier": { $ne: today } },
+        { $set: { "Actif": false } }
+      );
+    })
+
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  console.log("base du monde a ete mise a jour")
 })();
 
 // trendMicro
@@ -294,7 +429,7 @@ function attendre(min, max) {
       await attendre(5000, 5000);
       totalPays = await page.$$('body > main > div.reseller.vitl.section.full-browser-width-wrap > div.child-of-full-width > div > div.form-wrap.row > div:nth-child(1) > div > select > option');
     } else {
-      let selectPays,payActuel,pays,actualise,cok,next,nom,adresse
+      let selectPays, payActuel, pays, actualise, cok, next, nom, adresse
       let tabInfo = []
       let nbPage = 0
       await page.goto(url);
@@ -302,7 +437,7 @@ function attendre(min, max) {
       selectPays = await page.$('body > main > div.reseller.vitl.section.full-browser-width-wrap > div.child-of-full-width > div > div.form-wrap.row > div:nth-child(1) > div > select');
       payActuel = (trendmicropays + 1).toString();
       await selectPays.select(payActuel);
-      await attendre(1000,1000)
+      await attendre(1000, 1000)
       pays = await page.evaluate(select => {
         return select.options[select.selectedIndex].text;
       }, selectPays);
@@ -341,22 +476,20 @@ function attendre(min, max) {
           }
           let tel = '';
           let tab = [nom, adresse, pays, tel, lien, 'TrendMicro'];
-          let tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g,''));
+          let tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g, ''));
           csv.push(tab1);
         }
         let button = await page.$('body > main > div.reseller.vitl.section.full-browser-width-wrap > div.child-of-full-width > div > nav > button.results-nav__button.next-button');
         if (button !== null) {
           let nombre1 = await page.$x('/html/body/main/div[1]/div[2]/div/nav/span/span[2]').then(element => element[0].evaluate(node => node.textContent));
           await button.click();
-          await attendre(2500,3000)
+          await attendre(2500, 3000)
           let nombre2 = await page.$x('/html/body/main/div[1]/div[2]/div/nav/span/span[2]').then(element => element[0].evaluate(node => node.textContent));
           if (nombre1 === nombre2) {
             next = false;
-            console.log('10')
           }
         } else {
           next = false;
-          console.log('11')
         }
       }
     }
@@ -370,7 +503,7 @@ function attendre(min, max) {
   }
   await cluster.close();
   let csv2 = Array.from(new Set(csv));
-  for(let m =0;m < csv2.length;m++){
+  for (let m = 0; m < csv2.length; m++) {
     csvData.push(csv2[m])
   }
   console.log('trendMicro Effectuer')
@@ -381,12 +514,54 @@ function attendre(min, max) {
       console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
     }
   });
+  try {
+    client.connect(err => {
+      const collection = client.db('Info').collection('classementMonde');
+      for (let i = 0; i < csvData.length; i++) {
+        collection.findOneAndUpdate(
+          {
+            "Nom": `${csvData[i][0]}`,
+            "Adresse": `${csvData[i][1]}`,
+            "Pays": `${csvData[i][2]}`,
+            "Telephone": `${csvData[i][3]}`,
+            "Lien": `${csvData[i][4]}`,
+            "Marque": `${csvData[i][5]}`,
+            "Actif": true
+          },
+          {
+            $setOnInsert: { "Premier": today },
+            $set: { "Dernier": today }
+          },
+          {
+            upsert: true,
+            returnOriginal: false
+          },
+          function (err, donne) {
+            if (!err) {
+              if (!donne.lastErrorObject.updatedExisting) {
+                console.log('nouvelle entreprise!')
+              }
+            }
+          }
+        )
+      }
+      // remplacement des documents où dernier est différent de la date d'aujourd'hui
+      collection.updateMany(
+        { "Dernier": { $ne: today } },
+        { $set: { "Actif": false } }
+      );
+    })
+
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  console.log("base du monde a ete mise a jour")
 })();
 
 // //trellix
 (async () => {
   let first = true
-  let options,countries,firstPage,next,donne,nomE,nom,info,tabInfo,adresse,pays,tel,lien,tab,suivant
+  let options, countries, firstPage, next, donne, nomE, nom, info, tabInfo, adresse, pays, tel, lien, tab, suivant
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
     maxConcurrency: 5,
@@ -443,7 +618,7 @@ function attendre(min, max) {
             lien = '';
           }
           tab = [nom, adresse, pays, tel, lien, "Trellix"];
-          let tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g,''));
+          let tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g, ''));
           csvData.push(tab1);
         }
         if (firstPage) {
@@ -483,6 +658,48 @@ function attendre(min, max) {
       console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
     }
   });
+  try {
+    client.connect(err => {
+      const collection = client.db('Info').collection('classementMonde');
+      for (let i = 0; i < csvData.length; i++) {
+        collection.findOneAndUpdate(
+          {
+            "Nom": `${csvData[i][0]}`,
+            "Adresse": `${csvData[i][1]}`,
+            "Pays": `${csvData[i][2]}`,
+            "Telephone": `${csvData[i][3]}`,
+            "Lien": `${csvData[i][4]}`,
+            "Marque": `${csvData[i][5]}`,
+            "Actif": true
+          },
+          {
+            $setOnInsert: { "Premier": today },
+            $set: { "Dernier": today }
+          },
+          {
+            upsert: true,
+            returnOriginal: false
+          },
+          function (err, donne) {
+            if (!err) {
+              if (!donne.lastErrorObject.updatedExisting) {
+                console.log('nouvelle entreprise!')
+              }
+            }
+          }
+        )
+      }
+      // remplacement des documents où dernier est différent de la date d'aujourd'hui
+      collection.updateMany(
+        { "Dernier": { $ne: today } },
+        { $set: { "Actif": false } }
+      );
+    })
+
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  console.log("base du monde a ete mise a jour")
 })();
 
 // sophos
@@ -490,7 +707,7 @@ function attendre(min, max) {
   let first = true
   let tabLien = []
   let csv = []
-  let donne,lien,datalien,nom,taille,adresse,pays,tel,website,tab
+  let donne, lien, datalien, nom, taille, adresse, pays, tel, website, tab
   let nbPage = 0
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
@@ -505,19 +722,19 @@ function attendre(min, max) {
     },
   });
   await cluster.task(async ({ page, data: url }) => {
-    nbPage ++
-    console.log(`\nSohpos, page: ${nbPage}\n`)
     await page.goto(url);
     await attendre(5000, 5000)
     if (first) {
+      nbPage++
+      console.log(`\nSohpos, page: ${nbPage}\n`)
       donne = await page.$$('#Locator_BodyContent_ResultsContainer > div:nth-child(4) > div.col-lg-9.col-md-9.col-sm-12 > div > div');
       for (let i = 1; i <= donne.length; i++) {
         lien = await page.$('#Locator_BodyContent_ResultsContainer > div:nth-child(4) > div.col-lg-9.col-md-9.col-sm-12 > div > div:nth-child(' + i + ') > div > div.panel-body.locator-panel-styles > p > a')
         datalien = await page.evaluate((lien) => lien.href, lien);
         tabLien.push(datalien)
       }
-      console.log()
     } else {
+      console.log(`Sophos, partenaire: ${csv.length}`)
       taille = await page.$x('//*[@id="overview"]/div[2]/div/div[2]/span[1]');
       if (taille.length > 0) {
         nom = await page.$x('//*[@id="overview"]/div[2]/div/div[2]/span[1]').then(element => element[0].evaluate(node => node.textContent));
@@ -549,12 +766,12 @@ function attendre(min, max) {
         website = '';
       }
       tab = [nom, adresse, pays, tel, website, 'Sophos'];
-      let tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g,''));
+      let tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g, ''));
       csv.push(tab1)
     }
 
   });
-  for (let j=0;j<=1000;j++) {
+  for (let j = 0; j <= 1000; j++) {
     await cluster.queue(`https://partners.sophos.com/english/directory/search?p=${j}`)
   }
   await cluster.idle()
@@ -565,7 +782,7 @@ function attendre(min, max) {
   await cluster.idle();
   await cluster.close();
   let csv2 = Array.from(new Set(csv));
-  for(let m =0;m < csv2.length;m++){
+  for (let m = 0; m < csv2.length; m++) {
     csvData.push(csv2[m])
   }
   console.log('Sophos Effectuer')
@@ -576,11 +793,53 @@ function attendre(min, max) {
       console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
     }
   });
+  try {
+    client.connect(err => {
+      const collection = client.db('Info').collection('classementMonde');
+      for (let i = 0; i < csvData.length; i++) {
+        collection.findOneAndUpdate(
+          {
+            "Nom": `${csvData[i][0]}`,
+            "Adresse": `${csvData[i][1]}`,
+            "Pays": `${csvData[i][2]}`,
+            "Telephone": `${csvData[i][3]}`,
+            "Lien": `${csvData[i][4]}`,
+            "Marque": `${csvData[i][5]}`,
+            "Actif": true
+          },
+          {
+            $setOnInsert: { "Premier": today },
+            $set: { "Dernier": today }
+          },
+          {
+            upsert: true,
+            returnOriginal: false
+          },
+          function (err, donne) {
+            if (!err) {
+              if (!donne.lastErrorObject.updatedExisting) {
+                console.log('nouvelle entreprise!')
+              }
+            }
+          }
+        )
+      }
+      // remplacement des documents où dernier est différent de la date d'aujourd'hui
+      collection.updateMany(
+        { "Dernier": { $ne: today } },
+        { $set: { "Actif": false } }
+      );
+    })
+
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  console.log("base du monde a ete mise a jour")
 })();
 
 // kapersky
 (async () => {
-  let donne,data,nom,ad,adresse,actuellePays,pays,tel,lien,tab
+  let donne, data, nom, ad, adresse, actuellePays, pays, tel, lien, tab
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
     maxConcurrency: 25,
@@ -607,7 +866,7 @@ function attendre(min, max) {
       tel = data[i].phone
       lien = data[i].website
       tab = [nom, adresse, pays, tel, lien, "Kapersky"]
-      let tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g,''));
+      let tab1 = tab.map(val => val.replace(/,/g, ".").replace(/\n/g, ''));
       csvData.push(tab1)
     }
   });
@@ -624,50 +883,190 @@ function attendre(min, max) {
       console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
     }
   });
-})();
-
-try {
-  const uri = "mongodb+srv://CyberSite:EEpwNzf1LM6R95S0@cluster0.c6zinmu.mongodb.net/?retryWrites=true&w=majority";
-  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-  client.connect(err => {
-    const collection = client.db('Info').collection('classementMonde');
-    var today = new Date();
-    for (let i = 0; i < csvAllMonde.length; i++) {
-      collection.findOneAndUpdate(
-        {
-          "Nom": `${csvAllMonde[i][0]}`,
-          "Adresse": `${csvAllMonde[i][1]}`,
-          "Pays": `${csvAllMonde[i][2]}`,
-          "Telephone": `${csvAllMonde[i][3]}`,
-          "Lien": `${csvAllMonde[i][4]}`,
-          "Marque": `${csvAllMonde[i][5]}`,
-          "Actif": true
-        },
-        {
-          $setOnInsert: { "Premier": today },
-          $set: { "Dernier": today }
-        },
-        {
-          upsert: true,
-          returnOriginal: false
-        },
-        function (err, donne) {
-          if (!err) {
-            if (!donne.lastErrorObject.updatedExisting) {
-              console.log('nouvelle entreprise!')
+  try {
+    client.connect(err => {
+      const collection = client.db('Info').collection('classementMonde');
+      for (let i = 0; i < csvData.length; i++) {
+        collection.findOneAndUpdate(
+          {
+            "Nom": `${csvData[i][0]}`,
+            "Adresse": `${csvData[i][1]}`,
+            "Pays": `${csvData[i][2]}`,
+            "Telephone": `${csvData[i][3]}`,
+            "Lien": `${csvData[i][4]}`,
+            "Marque": `${csvData[i][5]}`,
+            "Actif": true
+          },
+          {
+            $setOnInsert: { "Premier": today },
+            $set: { "Dernier": today }
+          },
+          {
+            upsert: true,
+            returnOriginal: false
+          },
+          function (err, donne) {
+            if (!err) {
+              if (!donne.lastErrorObject.updatedExisting) {
+                console.log('nouvelle entreprise!')
+              }
             }
           }
-        }
-      )
-    }
-    // remplacement des documents où dernier est différent de la date d'aujourd'hui
-    collection.updateMany(
-      { "Dernier": { $ne: today } },
-      { $set: { "Actif": false } }
-    );
-  })
+        )
+      }
+      // remplacement des documents où dernier est différent de la date d'aujourd'hui
+      collection.updateMany(
+        { "Dernier": { $ne: today } },
+        { $set: { "Actif": false } }
+      );
+    })
 
-} catch (err) {
-  console.error(`Error: ${err}`);
-}
-console.log("base du monde a ete mise a jour")
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  console.log("base du monde a ete mise a jour")
+})();
+
+// //bit Defender
+(async () => {
+  let csv = []
+  let paysActuelle = 0
+  const cluster = await Cluster.launch({
+    concurrency: Cluster.CONCURRENCY_CONTEXT,
+    maxConcurrency: 1,
+    timeout: 500000000,
+    puppeteerOptions: {
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ]
+    },
+  });
+  await cluster.task(async ({ page, data: url }) => {
+    let next, j, world, button, select, donne, taille, nom, adresse, tel, lien, tab, tab1, suivant, long, pays, selectoption
+    paysActuelle++
+    await page.goto(url);
+    next = true
+    j = 1
+    await attendre(5000, 5000);
+    cok = await page.$("#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll")
+    await cok.click()
+    await attendre(5000, 5000)
+    world = await page.$('#country_select')
+    actuellePays = tabPays[paysActuelle].toLowerCase()
+    try {
+      await world.select(actuellePays)
+      selectoption = await page.$('#country_select');
+      pays = await page.evaluate(select => select.options[select.selectedIndex].text, selectoption);
+      await attendre(1000, 1000)
+      select = await page.$('#per_page')
+      await select.select('50');
+      await attendre(1000, 1000)
+      button = await page.$('#search_entries > div > div:nth-child(4) > button')
+      await button.click()
+      await attendre(5000, 5000)
+      console.log(`BitDefender, pays: ${pays}`)
+      while (next) {
+        donne = await page.$$('#partner_list_rows > div');
+        for (let i = 1; i <= donne.length; i++) {
+          taille = await page.$x('//*[@id="partner_list_rows"]/div[' + i + ']/div[2]/span');
+          if (await taille.length > 0) {
+            nom = await page.$x('//*[@id="partner_list_rows"]/div[' + i + ']/div[2]/span').then(element => element[0].evaluate(node => node.textContent));
+          } else {
+            nom = '';
+          }
+          taille = await page.$x('//*[@id="partner_list_rows"]/div[' + i + ']/div[3]/span[2]');
+          if (await taille.length > 0) {
+            adresse = await page.$x('//*[@id="partner_list_rows"]/div[' + i + ']/div[3]/span[2]').then(element => element[0].evaluate(node => node.textContent));
+          } else {
+            adresse = '';
+          }
+          taille = await page.$x('//*[@id="partner_list_rows"]/div[' + i + ']/div[4]/div/span');
+          if (await taille.length > 0) {
+            tel = await page.$x('//*[@id="partner_list_rows"]/div[' + i + ']/div[4]/div/span').then(element => element[0].evaluate(node => node.textContent));
+          } else {
+            tel = '';
+          }
+          taille = await page.$x('//*[@id="partner_list_rows"]/div[' + i + ']/div[4]/div/a');
+          if (await taille.length > 0) {
+            lien = await page.$x('//*[@id="partner_list_rows"]/div[' + i + ']/div[4]/div/a').then(element => element[0].evaluate(node => node.textContent));
+          } else {
+            lien = '';
+          }
+          tab = [nom, adresse, pays, tel, lien, 'BitDefender'];
+          tab1 = tab.map(val => val.replace(/,/g, ".").replace(/<\/p>/g, " ").replace(/\n/g, ''));
+          csv.push(tab1)
+        }
+        j++
+        suivant = await page.$('#page')
+        long = await suivant.select(`${j}`)
+        if (long.length !== 0) {
+          await suivant.select(`${j}`)
+          await attendre(5000, 5000)
+        } else {
+          next = false;
+        }
+      }
+    } catch { }
+  });
+  for (let paysDefender = 0; paysDefender < tabPays.length; paysDefender++) {
+    await cluster.queue('https://www.bitdefender.fr/partners/partner-locator.html')
+  }
+  await cluster.idle();
+  await cluster.close();
+  let csv2 = Array.from(new Set(csv));
+  for (let m = 0; m < csv2.length; m++) {
+    csvData.push(csv2[m])
+  }
+  console.log('BitDefender Effectuer')
+  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
+    }
+  });
+  try {
+    client.connect(err => {
+      const collection = client.db('Info').collection('classementMonde');
+      for (let i = 0; i < csvData.length; i++) {
+        collection.findOneAndUpdate(
+          {
+            "Nom": `${csvData[i][0]}`,
+            "Adresse": `${csvData[i][1]}`,
+            "Pays": `${csvData[i][2]}`,
+            "Telephone": `${csvData[i][3]}`,
+            "Lien": `${csvData[i][4]}`,
+            "Marque": `${csvData[i][5]}`,
+            "Actif": true
+          },
+          {
+            $setOnInsert: { "Premier": today },
+            $set: { "Dernier": today }
+          },
+          {
+            upsert: true,
+            returnOriginal: false
+          },
+          function (err, donne) {
+            if (!err) {
+              if (!donne.lastErrorObject.updatedExisting) {
+                console.log('nouvelle entreprise!')
+              }
+            }
+          }
+        )
+      }
+      // remplacement des documents où dernier est différent de la date d'aujourd'hui
+      collection.updateMany(
+        { "Dernier": { $ne: today } },
+        { $set: { "Actif": false } }
+      );
+    })
+
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+  console.log("base du monde a ete mise a jour")
+})();
