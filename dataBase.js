@@ -67,7 +67,7 @@ const exec = util.promisify(execFile);
       csvAll.push(element)
     });
     console.log('10eme site effectuer')
-    fs.writeFile('scrapAll.csv', csvAll.join('\n'), 'utf8', function (err) {
+    fs.writeFile('scrapFrance.csv', csvAll.join('\n'), 'utf8', function (err) {
       if (err) {
         console.error(err);
       } else {
@@ -86,12 +86,12 @@ const exec = util.promisify(execFile);
             "Adresse": `${csvAll[i][1]}`,
             "Telephone": `${csvAll[i][2]}`,
             "Lien": `${csvAll[i][3]}`,
-            "Marque": `${csvAll[i][4]}`,
-            "Actif": true
+            "Marque": `${csvAll[i][4]}`
           },
           {
             $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
+            $set: { "Dernier": today },
+            $set: {"Actif": true}
           },
           {
             upsert: true,

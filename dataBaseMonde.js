@@ -11,6 +11,7 @@ const uri = "mongodb+srv://CyberSite:EEpwNzf1LM6R95S0@cluster0.c6zinmu.mongodb.n
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 var today = new Date();
 
+let totalPartnerFait = 0
 let csvData = [];
 let paysMonde = ['Afghanistan', 'Albania', 'Antarctica', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Azerbaijan', 'Argentina', 'Australia', 'Austria', 'Bahamas', 'Bahrain', 'Bangladesh', 'Armenia', 'Barbados', 'Belgium', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Bouvet Island', 'Brazil', 'Belize', 'British Indian Ocean Territory', 'Solomon Islands', 'British Virgin Islands', 'Brunei Darussalam', 'Bulgaria', 'Myanmar', 'Burundi', 'Belarus', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands', 'Central African', 'Sri Lanka', 'Chad', 'Chile', 'China', 'Taiwan', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Mayotte', 'Republic of the Congo', 'The Democratic Republic Of The Congo', 'Cook Islands', 'Costa Rica', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Benin', 'Denmark', 'Dominica', 'Dominican Republic', 'Ecuador', 'El Salvador', 'Equatorial Guinea', 'Ethiopia', 'Eritrea', 'Estonia', 'Faroe Islands', 'Falkland Islands', 'South Georgia and the South Sandwich Islands', 'Fiji', 'Finland', 'Åland Islands', 'France', 'French Guiana', 'French Polynesia', 'French Southern Territories', 'Djibouti', 'Gabon', 'Georgia', 'Gambia', 'Occupied Palestinian Territory', 'Germany', 'Ghana', 'Gibraltar', 'Kiribati', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guinea', 'Guyana', 'Haiti', 'Heard Island and McDonald Islands', 'Vatican City State', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Islamic Republic of Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', "Côte d'Ivoire", 'Jamaica', 'Japan', 'Kazakhstan', 'Jordan', 'Kenya', "Democratic People's Republic of Korea", 'Republic of Korea', 'Kuwait', 'Kyrgyzstan', "Lao People's Democratic Republic", 'Lebanon', 'Lesotho', 'Latvia', 'Liberia', 'Libyan Arab Jamahiriya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macao', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Martinique', 'Mauritania', 'Mauritius', 'Mexico', 'Monaco', 'Mongolia', 'Republic of Moldova', 'Montserrat', 'Morocco', 'Mozambique', 'Oman', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'Netherlands Antilles', 'Aruba', 'New Caledonia', 'Vanuatu', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Norway', 'Northern Mariana Islands', 'United States Minor Outlying Islands', 'Federated States of Micronesia', 'Marshall Islands', 'Palau', 'Pakistan', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'Guinea-Bissau', 'Timor-Leste', 'Puerto Rico', 'Qatar', 'Réunion', 'Romania', 'Russian Federation', 'Rwanda', 'Saint Helena', 'Saint Kitts and Nevis', 'Anguilla', 'Saint Lucia', 'Saint-Pierre and Miquelon', 'Saint Vincent and the Grenadines', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Vietnam', 'Slovenia', 'Somalia', 'South Africa', 'Zimbabwe', 'Spain', 'Western Sahara', 'Sudan', 'Suriname', 'Svalbard and Jan Mayen', 'Swaziland', 'Sweden', 'Switzerland', 'Syrian Arab Republic', 'Tajikistan', 'Thailand', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'United Arab Emirates', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'The Former Yugoslav Republic of Macedonia', 'Egypt', 'United Kingdom', 'Isle of Man', 'United Republic Of Tanzania', 'United States', 'U.S. Virgin Islands', 'Burkina Faso', 'Uruguay', 'Uzbekistan', 'Venezuela', 'Wallis and Futuna', 'Samoa', 'Yemen', 'Serbia and Montenegro', 'Zambia']
 let tabPays = ["AF", "AL", "AQ", "DZ", "AS", "AD", "AO", "AG", "AZ", "AR", "AU", "AT", "BS", "BH", "BD", "AM", "BB", "BE", "BM", "BT", "BO", "BA", "BW", "BV", "BR", "BZ", "IO", "SB", "VG", "BN", "BG", "MM", "BI", "BY", "KH", "CM", "CA", "CV", "KY", "CF", "LK", "TD", "CL", "CN", "TW", "CX", "CC", "CO", "KM", "YT", "CG", "CD", "CK", "CR", "HR", "CU", "CY", "CZ", "BJ", "DK", "DM", "DO", "EC", "SV", "GQ", "ET", "ER", "EE", "FO", "FK", "GS", "FJ", "FI", "AX", "FR", "GF", "PF", "TF", "DJ", "GA", "GE", "GM", "PS", "DE", "GH", "GI", "KI", "GR", "GL", "GD", "GP", "GU", "GT", "GN", "GY", "HT", "HM", "VA", "HN", "HK", "HU", "IS", "IN", "ID", "IR", "IQ", "IE", "IL", "IT", "CI", "JM", "JP", "KZ", "JO", "KE", "KP", "KR", "KW", "KG", "LA", "LB", "LS", "LV", "LR", "LY", "LI", "LT", "LU", "MO", "MG", "MW", "MY", "MV", "ML", "MT", "MQ", "MR", "MU", "MX", "MC", "MN", "MD", "MS", "MA", "MZ", "OM", "NA", "NR", "NP", "NL", "AN", "AW", "NC", "VU", "NZ", "NI", "NE", "NG", "NU", "NF", "NO", "MP", "UM", "FM", "MH", "PW", "PK", "PA", "PG", "PY", "PE", "PH", "PN", "PL", "PT", "GW", "TL", "PR", "QA", "RE", "RO", "RU", "RW", "SH", "KN", "AI", "LC", "PM", "VC", "SM", "ST", "SA", "SN", "SC", "SL", "SG", "SK", "VN", "SI", "SO", "ZA", "ZW", "ES", "EH", "SD", "SR", "SJ", "SZ", "SE", "CH", "SY", "TJ", "TH", "TG", "TK", "TO", "TT", "AE", "TN", "TR", "TM", "TC", "TV", "UG", "UA", "MK", "EG", "GB", "IM", "TZ", "US", "VI", "BF", "UY", "UZ", "VE", "WF", "WS", "YE", "CS", "ZM"]
@@ -124,55 +125,7 @@ function attendre(min, max) {
     csvData.push(csv2[m])
   }
   console.log('Cisco Effectuer')
-  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
-    }
-  });
-  try {
-    client.connect(err => {
-      const collection = client.db('Info').collection('classementMonde');
-      for (let i = 0; i < csvData.length; i++) {
-        collection.findOneAndUpdate(
-          {
-            "Nom": `${csvData[i][0]}`,
-            "Adresse": `${csvData[i][1]}`,
-            "Pays": `${csvData[i][2]}`,
-            "Telephone": `${csvData[i][3]}`,
-            "Lien": `${csvData[i][4]}`,
-            "Marque": `${csvData[i][5]}`,
-            "Actif": true
-          },
-          {
-            $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
-          },
-          {
-            upsert: true,
-            returnOriginal: false
-          },
-          function (err, donne) {
-            if (!err) {
-              if (!donne.lastErrorObject.updatedExisting) {
-                console.log('nouvelle entreprise!')
-              }
-            }
-          }
-        )
-      }
-      // remplacement des documents où dernier est différent de la date d'aujourd'hui
-      collection.updateMany(
-        { "Dernier": { $ne: today } },
-        { $set: { "Actif": false } }
-      );
-    })
-
-  } catch (err) {
-    console.error(`Error: ${err}`);
-  }
-  console.log("base du monde a ete mise a jour")
+  totalPartnerFait++
 })();
 
 // withsecure
@@ -195,9 +148,9 @@ function attendre(min, max) {
     await page.goto(url);
     await attendre(5000, 5000)
     html = await page.content();
-    fs.writeFileSync('scrapWith.html', html);
+    fs.writeFileSync('scrapWithWorld.html', html);
     await attendre(5000, 5000);
-    dom = await JSDOM.fromFile('./scrapWith.html');
+    dom = await JSDOM.fromFile('./scrapWithWorld.html');
     await attendre(5000, 5000)
     donne = dom.window.document.querySelectorAll('.p-a-2');
     for (let i = 0; i < donne.length; i++) {
@@ -239,57 +192,8 @@ function attendre(min, max) {
     csvData.push(csv2[m])
   }
   console.log('Withsecure Effectuer')
-  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
-    }
-  });
-  try {
-    client.connect(err => {
-      const collection = client.db('Info').collection('classementMonde');
-      for (let i = 0; i < csvData.length; i++) {
-        collection.findOneAndUpdate(
-          {
-            "Nom": `${csvData[i][0]}`,
-            "Adresse": `${csvData[i][1]}`,
-            "Pays": `${csvData[i][2]}`,
-            "Telephone": `${csvData[i][3]}`,
-            "Lien": `${csvData[i][4]}`,
-            "Marque": `${csvData[i][5]}`,
-            "Actif": true
-          },
-          {
-            $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
-          },
-          {
-            upsert: true,
-            returnOriginal: false
-          },
-          function (err, donne) {
-            if (!err) {
-              if (!donne.lastErrorObject.updatedExisting) {
-                console.log('nouvelle entreprise!')
-              }
-            }
-          }
-        )
-      }
-      // remplacement des documents où dernier est différent de la date d'aujourd'hui
-      collection.updateMany(
-        { "Dernier": { $ne: today } },
-        { $set: { "Actif": false } }
-      );
-    })
-
-  } catch (err) {
-    console.error(`Error: ${err}`);
-  }
-  console.log("base du monde a ete mise a jour")
+  totalPartnerFait++
 })();
-
 // watchguard
 (async () => {
   let paysRecherche, button, donne, nomE, nom, ad, adresse, adresseTab, tel, lien, tab, tab1
@@ -355,55 +259,7 @@ function attendre(min, max) {
     csvData.push(csv2[m])
   }
   console.log('Watchguard Effectuer')
-  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
-    }
-  });
-  try {
-    client.connect(err => {
-      const collection = client.db('Info').collection('classementMonde');
-      for (let i = 0; i < csvData.length; i++) {
-        collection.findOneAndUpdate(
-          {
-            "Nom": `${csvData[i][0]}`,
-            "Adresse": `${csvData[i][1]}`,
-            "Pays": `${csvData[i][2]}`,
-            "Telephone": `${csvData[i][3]}`,
-            "Lien": `${csvData[i][4]}`,
-            "Marque": `${csvData[i][5]}`,
-            "Actif": true
-          },
-          {
-            $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
-          },
-          {
-            upsert: true,
-            returnOriginal: false
-          },
-          function (err, donne) {
-            if (!err) {
-              if (!donne.lastErrorObject.updatedExisting) {
-                console.log('nouvelle entreprise!')
-              }
-            }
-          }
-        )
-      }
-      // remplacement des documents où dernier est différent de la date d'aujourd'hui
-      collection.updateMany(
-        { "Dernier": { $ne: today } },
-        { $set: { "Actif": false } }
-      );
-    })
-
-  } catch (err) {
-    console.error(`Error: ${err}`);
-  }
-  console.log("base du monde a ete mise a jour")
+  totalPartnerFait++
 })();
 
 // trendMicro
@@ -507,55 +363,7 @@ function attendre(min, max) {
     csvData.push(csv2[m])
   }
   console.log('trendMicro Effectuer')
-  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
-    }
-  });
-  try {
-    client.connect(err => {
-      const collection = client.db('Info').collection('classementMonde');
-      for (let i = 0; i < csvData.length; i++) {
-        collection.findOneAndUpdate(
-          {
-            "Nom": `${csvData[i][0]}`,
-            "Adresse": `${csvData[i][1]}`,
-            "Pays": `${csvData[i][2]}`,
-            "Telephone": `${csvData[i][3]}`,
-            "Lien": `${csvData[i][4]}`,
-            "Marque": `${csvData[i][5]}`,
-            "Actif": true
-          },
-          {
-            $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
-          },
-          {
-            upsert: true,
-            returnOriginal: false
-          },
-          function (err, donne) {
-            if (!err) {
-              if (!donne.lastErrorObject.updatedExisting) {
-                console.log('nouvelle entreprise!')
-              }
-            }
-          }
-        )
-      }
-      // remplacement des documents où dernier est différent de la date d'aujourd'hui
-      collection.updateMany(
-        { "Dernier": { $ne: today } },
-        { $set: { "Actif": false } }
-      );
-    })
-
-  } catch (err) {
-    console.error(`Error: ${err}`);
-  }
-  console.log("base du monde a ete mise a jour")
+  totalPartnerFait++
 })();
 
 // //trellix
@@ -651,55 +459,7 @@ function attendre(min, max) {
   await cluster.idle();
   await cluster.close();
   console.log('Trellix Effectuer')
-  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
-    }
-  });
-  try {
-    client.connect(err => {
-      const collection = client.db('Info').collection('classementMonde');
-      for (let i = 0; i < csvData.length; i++) {
-        collection.findOneAndUpdate(
-          {
-            "Nom": `${csvData[i][0]}`,
-            "Adresse": `${csvData[i][1]}`,
-            "Pays": `${csvData[i][2]}`,
-            "Telephone": `${csvData[i][3]}`,
-            "Lien": `${csvData[i][4]}`,
-            "Marque": `${csvData[i][5]}`,
-            "Actif": true
-          },
-          {
-            $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
-          },
-          {
-            upsert: true,
-            returnOriginal: false
-          },
-          function (err, donne) {
-            if (!err) {
-              if (!donne.lastErrorObject.updatedExisting) {
-                console.log('nouvelle entreprise!')
-              }
-            }
-          }
-        )
-      }
-      // remplacement des documents où dernier est différent de la date d'aujourd'hui
-      collection.updateMany(
-        { "Dernier": { $ne: today } },
-        { $set: { "Actif": false } }
-      );
-    })
-
-  } catch (err) {
-    console.error(`Error: ${err}`);
-  }
-  console.log("base du monde a ete mise a jour")
+  totalPartnerFait++
 })();
 
 // sophos
@@ -786,55 +546,7 @@ function attendre(min, max) {
     csvData.push(csv2[m])
   }
   console.log('Sophos Effectuer')
-  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
-    }
-  });
-  try {
-    client.connect(err => {
-      const collection = client.db('Info').collection('classementMonde');
-      for (let i = 0; i < csvData.length; i++) {
-        collection.findOneAndUpdate(
-          {
-            "Nom": `${csvData[i][0]}`,
-            "Adresse": `${csvData[i][1]}`,
-            "Pays": `${csvData[i][2]}`,
-            "Telephone": `${csvData[i][3]}`,
-            "Lien": `${csvData[i][4]}`,
-            "Marque": `${csvData[i][5]}`,
-            "Actif": true
-          },
-          {
-            $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
-          },
-          {
-            upsert: true,
-            returnOriginal: false
-          },
-          function (err, donne) {
-            if (!err) {
-              if (!donne.lastErrorObject.updatedExisting) {
-                console.log('nouvelle entreprise!')
-              }
-            }
-          }
-        )
-      }
-      // remplacement des documents où dernier est différent de la date d'aujourd'hui
-      collection.updateMany(
-        { "Dernier": { $ne: today } },
-        { $set: { "Actif": false } }
-      );
-    })
-
-  } catch (err) {
-    console.error(`Error: ${err}`);
-  }
-  console.log("base du monde a ete mise a jour")
+  totalPartnerFait++
 })();
 
 // kapersky
@@ -876,55 +588,7 @@ function attendre(min, max) {
   await cluster.idle();
   await cluster.close();
   console.log('Kapersky Effectuer')
-  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
-    }
-  });
-  try {
-    client.connect(err => {
-      const collection = client.db('Info').collection('classementMonde');
-      for (let i = 0; i < csvData.length; i++) {
-        collection.findOneAndUpdate(
-          {
-            "Nom": `${csvData[i][0]}`,
-            "Adresse": `${csvData[i][1]}`,
-            "Pays": `${csvData[i][2]}`,
-            "Telephone": `${csvData[i][3]}`,
-            "Lien": `${csvData[i][4]}`,
-            "Marque": `${csvData[i][5]}`,
-            "Actif": true
-          },
-          {
-            $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
-          },
-          {
-            upsert: true,
-            returnOriginal: false
-          },
-          function (err, donne) {
-            if (!err) {
-              if (!donne.lastErrorObject.updatedExisting) {
-                console.log('nouvelle entreprise!')
-              }
-            }
-          }
-        )
-      }
-      // remplacement des documents où dernier est différent de la date d'aujourd'hui
-      collection.updateMany(
-        { "Dernier": { $ne: today } },
-        { $set: { "Actif": false } }
-      );
-    })
-
-  } catch (err) {
-    console.error(`Error: ${err}`);
-  }
-  console.log("base du monde a ete mise a jour")
+  totalPartnerFait++
 })();
 
 // //bit Defender
@@ -1020,53 +684,61 @@ function attendre(min, max) {
     csvData.push(csv2[m])
   }
   console.log('BitDefender Effectuer')
-  fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
-    }
-  });
-  try {
-    client.connect(err => {
-      const collection = client.db('Info').collection('classementMonde');
-      for (let i = 0; i < csvData.length; i++) {
-        collection.findOneAndUpdate(
-          {
-            "Nom": `${csvData[i][0]}`,
-            "Adresse": `${csvData[i][1]}`,
-            "Pays": `${csvData[i][2]}`,
-            "Telephone": `${csvData[i][3]}`,
-            "Lien": `${csvData[i][4]}`,
-            "Marque": `${csvData[i][5]}`,
-            "Actif": true
-          },
-          {
-            $setOnInsert: { "Premier": today },
-            $set: { "Dernier": today }
-          },
-          {
-            upsert: true,
-            returnOriginal: false
-          },
-          function (err, donne) {
-            if (!err) {
-              if (!donne.lastErrorObject.updatedExisting) {
-                console.log('nouvelle entreprise!')
+  totalPartnerFait++
+})();
+
+// base de donne
+(async () => {
+  while (totalPartnerFait !== 7) {
+  }
+  if (totalPartnerFait === 7) {
+    fs.writeFile('scrapAll.csv', csvData.join('\n'), 'utf8', function (err) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log('Fichier CSV de la nouvelle BDD Monde enregistré');
+      }
+    });
+    try {
+      client.connect(err => {
+        const collection = client.db('Info').collection('classementMonde');
+        for (i = 0; i < csvData.length; i++) {
+          collection.findOneAndUpdate(
+            {
+              "Nom": `${csvData[i][0]}`,
+              "Adresse": `${csvData[i][1]}`,
+              "Telephone": `${csvData[i][2]}`,
+              "Lien": `${csvData[i][3]}`,
+              "Marque": `${csvData[i][4]}`
+            },
+            {
+              $setOnInsert: { "Premier": today },
+              $set: { "Dernier": today },
+              $set: { "Actif": true }
+            },
+            {
+              upsert: true,
+              returnOriginal: false
+            },
+            function (err, donne) {
+              if (!err) {
+                if (!donne.lastErrorObject.updatedExisting) {
+                  console.log('nouvelle entreprise!')
+                }
               }
             }
-          }
-        )
-      }
-      // remplacement des documents où dernier est différent de la date d'aujourd'hui
-      collection.updateMany(
-        { "Dernier": { $ne: today } },
-        { $set: { "Actif": false } }
-      );
-    })
-
-  } catch (err) {
-    console.error(`Error: ${err}`);
+          )
+        }
+        // remplacement des documents où dernier est différent de la date d'aujourd'hui
+        collection.updateMany(
+          { "Dernier": { $ne: today } },
+          { $set: { "Actif": false } }
+        );
+      })
+    } catch (err) {
+      console.error(`Error: ${err}`);
+    }
+    console.log("la base du Monde a ete mise a jour")
   }
-  console.log("base du monde a ete mise a jour")
-})();
+
+})
